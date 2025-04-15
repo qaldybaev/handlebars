@@ -1,6 +1,5 @@
 const socket = io("http://localhost:3000");
 
-    // localStorage'dan foydalanuvchi nomi va xona nomini olish
     const username = localStorage.getItem("username");
     const room = localStorage.getItem("room");
 
@@ -10,23 +9,35 @@ const socket = io("http://localhost:3000");
 
     document.getElementById("room-name").textContent = room;
 
-    // Socketga foydalanuvchi va xona bilan kirish
     socket.emit("joinRoom", { username, room });
 
     const form = document.querySelector("#chat-form");
     const msgInput = document.querySelector("#msg");
     const chatBox = document.querySelector("#chat-box");
+    const elMessages = document.querySelector(".chatMessage")
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const msg = msgInput.value;
       socket.emit("chatMessage", { msg, room });
-      msgInput.value = ""; // Inputni tozalash
+      msgInput.value = ""; 
     });
 
     socket.on("chatMessage", (msg) => {
-      const p = document.createElement("p");
-      p.textContent = msg;
-      chatBox.appendChild(p);
-      chatBox.scrollTop = chatBox.scrollHeight; // Yangi xabarni oxiriga qo'shish
-    });
+      // Vaqtni olish
+      const currentTime = new Date().toLocaleTimeString();
+  
+      elMessages.insertAdjacentHTML(
+          "beforeend",
+          `<div class="my-message align-self-end">
+              <p class="message border d-inline p-2 rounded-3 bg-body-secondary">
+                  ${msg}
+              </p>
+              <div class="author fs-6 fw-bolder text-end mt-1">
+                  <span class="text-muted">${username} <span class="ms-2">${currentTime}</span></span>
+              </div>
+          </div>`
+      );
+  });
+  
+  

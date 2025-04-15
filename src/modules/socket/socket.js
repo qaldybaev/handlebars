@@ -7,7 +7,7 @@ export const socketHandler = (io) => {
         
         socket.emit("chatMessage", `Xush kelibsiz, ${username}! Siz ${room} xonasidasiz.`);
         
-        socket.to(room).emit("chatMessage", `${username} xonaga kirdi.`);
+        socket.to(room).emit("chatMessage", `${username} xonaga qoshildi`);
       });
   
      
